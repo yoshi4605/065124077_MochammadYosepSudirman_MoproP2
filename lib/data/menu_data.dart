@@ -4,7 +4,7 @@ import '../models/menu_item.dart';
 const List<MenuItem> semuaMenu = [
   MenuItem(
     nama: 'Ayam Geprek Sambal Bawang',
-    deskripsi: 'Ayam crispy geprek sambal bawang pedas nampol + lalapan',
+    deskripsi: 'Ayam crispy geprek sambal bawang pedas nampol + lalapan segar',
     harga: 15000,
     kategori: 'Makanan',
     imageUrl:
@@ -28,7 +28,7 @@ const List<MenuItem> semuaMenu = [
   ),
   MenuItem(
     nama: 'Es Teh Manis Jumbo',
-    deskripsi: 'Teh melati dingin segar racikan khas porsi jumbo',
+    deskripsi: 'Teh melati dingin segar racikan khas porsi jumbo pelepas dahaga',
     harga: 4000,
     kategori: 'Minuman',
     imageUrl:
@@ -69,12 +69,12 @@ const List<MenuItem> semuaMenu = [
     kategori: 'Makanan',
     imageUrl:
         'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&auto=format&fit=crop&q=80',
-    rating: 4.7,
+    rating: 4.8,
     ikon: Icons.ramen_dining,
     warnaIkon: Color(0xFFE67E22),
   ),
   MenuItem(
-    nama: 'Soto Ayam Kuning',
+    nama: 'Soto Ayam Kuning Spesial',
     deskripsi: 'Kuah kaldu soto kaya rempah dengan sohun, suwiran ayam, dan kol segar',
     harga: 12000,
     kategori: 'Makanan',
@@ -97,7 +97,7 @@ const List<MenuItem> semuaMenu = [
   ),
   MenuItem(
     nama: 'Es Jeruk Peras Segar',
-    deskripsi: 'Perasan jeruk asli murni dingin pelepas dahaga',
+    deskripsi: 'Perasan jeruk asli murni dingin segar',
     harga: 5000,
     kategori: 'Minuman',
     imageUrl:

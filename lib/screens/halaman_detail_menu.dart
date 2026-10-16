@@ -380,7 +380,7 @@ class _HalamanDetailMenuState extends State<HalamanDetailMenu> {
               style: ElevatedButton.styleFrom(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                backgroundColor: const Color(0xFFE74C3C),
+                backgroundColor: const Color(0xFF2C3E50),
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

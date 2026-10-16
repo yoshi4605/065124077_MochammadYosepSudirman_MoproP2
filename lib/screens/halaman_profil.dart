@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../data/app_state.dart';
 import '../utils/app_exit_dialog.dart';
 import '../utils/currency_formatter.dart';
 
@@ -247,14 +246,8 @@ class _HalamanProfilState extends State<HalamanProfil> {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: AppState.instance,
-      builder: (context, _) {
-        final isDarkMode = AppState.instance.isDarkMode;
-
-        return Scaffold(
-          backgroundColor:
-              isDarkMode ? const Color(0xFF121212) : const Color(0xFFF8F9FA),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8F9FA),
           appBar: AppBar(
             title: const Text(
               'Profil Pengguna',
@@ -280,13 +273,9 @@ class _HalamanProfilState extends State<HalamanProfil> {
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18),
-                    side: BorderSide(
-                      color: isDarkMode
-                          ? Colors.grey.shade800
-                          : Colors.grey.shade200,
-                    ),
+                    side: BorderSide(color: Colors.grey.shade200),
                   ),
-                  color: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
+                  color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 24, horizontal: 16),
@@ -329,12 +318,10 @@ class _HalamanProfilState extends State<HalamanProfil> {
                         const SizedBox(height: 14),
                         Text(
                           _nama,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: isDarkMode
-                                ? Colors.white
-                                : const Color(0xFF1A1A1A),
+                            color: Color(0xFF1A1A1A),
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -416,65 +403,28 @@ class _HalamanProfilState extends State<HalamanProfil> {
                 ),
                 const SizedBox(height: 16),
 
-                // 2. SwitchListTile (Theme & Notif) - Wajib sesuai rubrik
+                // 2. SwitchListTile (Notifikasi) - Wajib sesuai rubrik
                 Card(
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(
-                      color: isDarkMode
-                          ? Colors.grey.shade800
-                          : Colors.grey.shade200,
-                    ),
+                    side: BorderSide(color: Colors.grey.shade200),
                   ),
-                  color: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
-                  child: Column(
-                    children: [
-                      // SwitchListTile Tema Gelap / Terang
-                      SwitchListTile(
-                        secondary: const CircleAvatar(
-                          backgroundColor: Color(0xFFF0F3F4),
-                          child: Icon(Icons.dark_mode_outlined,
-                              color: Color(0xFF2C3E50), size: 20),
-                        ),
-                        title: const Text('Mode Gelap (Dark Theme)',
-                            style: TextStyle(fontSize: 14)),
-                        subtitle:
-                            const Text('Ubah tampilan visual ke tema gelap'),
-                        value: isDarkMode,
-                        activeThumbColor: const Color(0xFFE74C3C),
-                        onChanged: (val) {
-                          AppState.instance.toggleDarkMode(val);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(val
-                                  ? 'Mode Gelap diaktifkan'
-                                  : 'Mode Terang diaktifkan'),
-                              duration: const Duration(seconds: 1),
-                              behavior: SnackBarBehavior.floating,
-                              backgroundColor: const Color(0xFF2C3E50),
-                            ),
-                          );
-                        },
-                      ),
-                      const Divider(height: 1),
-                      // SwitchListTile Notifikasi
-                      SwitchListTile(
-                        secondary: const CircleAvatar(
-                          backgroundColor: Color(0xFFF0F3F4),
-                          child: Icon(Icons.notifications_outlined,
-                              color: Color(0xFF2C3E50), size: 20),
-                        ),
-                        title: const Text('Notifikasi Status Makanan',
-                            style: TextStyle(fontSize: 14)),
-                        subtitle: const Text('Pemberitahuan saat siap diambil'),
-                        value: _notifikasiAktif,
-                        activeThumbColor: const Color(0xFFE74C3C),
-                        onChanged: (val) {
-                          setState(() => _notifikasiAktif = val);
-                        },
-                      ),
-                    ],
+                  color: Colors.white,
+                  child: SwitchListTile(
+                    secondary: const CircleAvatar(
+                      backgroundColor: Color(0xFFF0F3F4),
+                      child: Icon(Icons.notifications_outlined,
+                          color: Color(0xFF2C3E50), size: 20),
+                    ),
+                    title: const Text('Notifikasi Status Makanan',
+                        style: TextStyle(fontSize: 14)),
+                    subtitle: const Text('Pemberitahuan saat siap diambil'),
+                    value: _notifikasiAktif,
+                    activeThumbColor: const Color(0xFF2C3E50),
+                    onChanged: (val) {
+                      setState(() => _notifikasiAktif = val);
+                    },
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -484,13 +434,9 @@ class _HalamanProfilState extends State<HalamanProfil> {
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(
-                      color: isDarkMode
-                          ? Colors.grey.shade800
-                          : Colors.grey.shade200,
-                    ),
+                    side: BorderSide(color: Colors.grey.shade200),
                   ),
-                  color: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
+                  color: Colors.white,
                   child: Column(
                     children: [
                       ExpansionTile(
@@ -593,7 +539,6 @@ class _HalamanProfilState extends State<HalamanProfil> {
             ),
           ),
         );
-      },
-    );
   }
 }
+

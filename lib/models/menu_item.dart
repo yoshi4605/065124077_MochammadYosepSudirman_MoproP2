@@ -23,3 +23,4 @@ class MenuItem {
     this.bestseller = false,
   });
 }
+

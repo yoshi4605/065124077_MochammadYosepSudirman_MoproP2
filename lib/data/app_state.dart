@@ -9,12 +9,6 @@ class AppState extends ChangeNotifier {
     _initDummyOrder();
   }
 
-  bool _isDarkMode = false;
-  bool get isDarkMode => _isDarkMode;
-  void toggleDarkMode(bool val) {
-    _isDarkMode = val;
-    notifyListeners();
-  }
 
   // Keranjang
   final List<CartItem> _cartItems = [];
