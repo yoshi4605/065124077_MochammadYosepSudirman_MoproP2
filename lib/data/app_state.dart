@@ -10,6 +10,24 @@ class AppState extends ChangeNotifier {
   }
 
 
+  // Saldo KantinPay
+  int _saldo = 75000;
+  int get saldo => _saldo;
+
+  void tambahSaldo(int nominal) {
+    _saldo += nominal;
+    notifyListeners();
+  }
+
+  bool kurangiSaldo(int nominal) {
+    if (_saldo >= nominal) {
+      _saldo -= nominal;
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+
   // Keranjang
   final List<CartItem> _cartItems = [];
   List<CartItem> get cartItems => List.unmodifiable(_cartItems);

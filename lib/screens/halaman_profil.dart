@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../data/app_state.dart';
 import '../utils/app_exit_dialog.dart';
 import '../utils/currency_formatter.dart';
 
@@ -15,7 +16,6 @@ class _HalamanProfilState extends State<HalamanProfil> {
   String _telepon = '+62 812-3456-7890';
   String _alamat = 'Jl. Mawar No. 12, Sleman, Yogyakarta';
 
-  int _saldoDompet = 75000;
   bool _notifikasiAktif = true;
 
   // 4. ChoiceChip (Top Up) - Wajib sesuai rubrik
@@ -87,9 +87,7 @@ class _HalamanProfilState extends State<HalamanProfil> {
                     ),
                   ),
                   onPressed: () {
-                    setState(() {
-                      _saldoDompet += nominalTerpilih;
-                    });
+                    AppState.instance.tambahSaldo(nominalTerpilih);
                     Navigator.pop(ctx);
 
                     // 5. SnackBar feedback (Wajib sesuai rubrik)
@@ -246,8 +244,11 @@ class _HalamanProfilState extends State<HalamanProfil> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+    return ListenableBuilder(
+      listenable: AppState.instance,
+      builder: (context, _) {
+        return Scaffold(
+          backgroundColor: const Color(0xFFF8F9FA),
           appBar: AppBar(
             title: const Text(
               'Profil Pengguna',
@@ -375,7 +376,7 @@ class _HalamanProfilState extends State<HalamanProfil> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              formatHarga(_saldoDompet),
+                              formatHarga(AppState.instance.saldo),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 22,
@@ -539,6 +540,8 @@ class _HalamanProfilState extends State<HalamanProfil> {
             ),
           ),
         );
+      },
+    );
   }
 }
 

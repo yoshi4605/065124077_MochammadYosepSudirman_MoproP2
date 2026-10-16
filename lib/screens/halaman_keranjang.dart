@@ -120,6 +120,24 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                               fontSize: 12, fontWeight: FontWeight.w600)),
                     ],
                   ),
+                  if (order.metodeBayar == 'KantinPay (Saldo)') ...[
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Sisa Saldo KantinPay:',
+                            style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        Text(
+                          formatHarga(AppState.instance.saldo),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF27AE60),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                   const Divider(height: 20),
                   const Text('Daftar Item:',
                       style: TextStyle(
@@ -221,6 +239,18 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
       builder: (context, _) {
         final cart = AppState.instance.cartItems;
         final totalHarga = AppState.instance.totalHargaCart;
+        final saldo = AppState.instance.saldo;
+        final bool saldoCukup = saldo >= totalHarga;
+
+        if (!saldoCukup && _metodeBayar == 'KantinPay (Saldo)') {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted && _metodeBayar == 'KantinPay (Saldo)') {
+              setState(() {
+                _metodeBayar = 'QRIS';
+              });
+            }
+          });
+        }
 
         return Scaffold(
           backgroundColor: const Color(0xFFF8F9FA),
@@ -515,16 +545,67 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                           },
                           child: Column(
                             children: _daftarMetode.map((metode) {
-                              return RadioListTile<String>(
-                                title: Text(
-                                  metode,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
+                              final isKantinPay = metode == 'KantinPay (Saldo)';
+                              final isDisable = isKantinPay && !saldoCukup;
+
+                              return IgnorePointer(
+                                ignoring: isDisable,
+                                child: Opacity(
+                                  opacity: isDisable ? 0.45 : 1.0,
+                                  child: RadioListTile<String>(
+                                    title: Row(
+                                      children: [
+                                        Text(
+                                          metode,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: isDisable
+                                                ? Colors.grey
+                                                : const Color(0xFF1A1A1A),
+                                          ),
+                                        ),
+                                        if (isDisable) ...[
+                                          const SizedBox(width: 8),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 6, vertical: 2),
+                                            decoration: BoxDecoration(
+                                              color: Colors.red.shade50,
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                              border: Border.all(
+                                                  color: Colors.red.shade200),
+                                            ),
+                                            child: Text(
+                                              'Saldo Kurang',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.red.shade700,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                    subtitle: isKantinPay
+                                        ? Text(
+                                            isDisable
+                                                ? 'Saldo Anda tidak cukup (${formatHarga(saldo)})'
+                                                : 'Sisa Saldo: ${formatHarga(saldo)}',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: isDisable
+                                                  ? Colors.red.shade600
+                                                  : Colors.grey.shade600,
+                                            ),
+                                          )
+                                        : null,
+                                    value: metode,
+                                    activeColor: const Color(0xFFE74C3C),
                                   ),
                                 ),
-                                value: metode,
-                                activeColor: const Color(0xFFE74C3C),
                               );
                             }).toList(),
                           ),
@@ -561,6 +642,35 @@ class _HalamanKeranjangState extends State<HalamanKeranjang> {
                             ),
                             ElevatedButton(
                               onPressed: () {
+                                if (_metodeBayar == 'KantinPay (Saldo)') {
+                                  if (AppState.instance.saldo < totalHarga) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Saldo KantinPay tidak mencukupi (${formatHarga(AppState.instance.saldo)}). Silakan top up di menu Profil atau gunakan metode lain.',
+                                        ),
+                                        backgroundColor: Colors.red.shade800,
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  final sukses =
+                                      AppState.instance.kurangiSaldo(totalHarga);
+                                  if (!sukses) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: const Text(
+                                            'Gagal memproses pembayaran dengan saldo!'),
+                                        backgroundColor: Colors.red.shade800,
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                    return;
+                                  }
+                                }
+
                                 final tipeStr = _tipePesanan
                                         .contains(TipePesanan.dineIn)
                                     ? 'Dine-in (Makan di Tempat)'
